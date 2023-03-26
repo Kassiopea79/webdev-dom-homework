@@ -7,7 +7,7 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
+      <ul class="comments" id="comments-list">
         <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
@@ -45,25 +45,100 @@
       </ul>
       <div class="add-form">
         <input
+          id="name-input"
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
         />
         <textarea
+          id="comments-input"
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button id="add-button" class="add-form-button">Написать</button>
         </div>
       </div>
     </div>
   </body>
+  <style>
+    .error {
+      background-color: red;
+    }
 
+    .button-color {
+      background-color: gray;
+    }
+  </style>
   <script>
-    // Код писать здесь
+    const commentsListElement = document.getElementById("comments-list");
+    const addButtonElement = document.getElementById("add-button");
+    const addNameElement = document.getElementById("name-input");
+    const addTextElement = document.getElementById("comments-input");
+    const currentDate = new Date();
+
+    // Add New Comment
+    const validComment = () => {
+      if (addNameElement.value && addTextElement.value) {
+        addButtonElement.disabled = false;
+        addButtonElement.classList.remove("button-color");
+      } else {
+        addButtonElement.disabled = true;
+        addButtonElement.classList.add("button-color");
+      }
+    };
+
+    const addComment = () => {
+      addButtonElement.addEventListener("click", () => {
+        addNameElement.classList.remove("error");
+        addTextElement.classList.remove("error");
+        addButtonElement.disabled = false;
+        addButtonElement.classList.remove("button-color");
+        if (addNameElement.value === "" && addTextElement.value === "") {
+          addNameElement.classList.add("error");
+          addTextElement.classList.add("error");
+          addButtonElement.disabled = true;
+          addButtonElement.classList.add("button-color");
+          return;
+        } else if (addNameElement.value === "") {
+          addNameElement.classList.add("error");
+          return;
+        } else if (addTextElement.value === "") {
+          addTextElement.classList.add("error");
+          return;
+        }
+        const oldCommentsList = commentsListElement.innerHTML;
+        commentsListElement.innerHTML =
+          oldCommentsList +
+          `<li class="comment">
+          <div class="comment-header">
+            <div><p>${addNameElement.value}</p></div>
+            <div><p>${currentDate}</p></div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              <p>${addTextElement.value}</p>
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">0</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>`;
+        addNameElement.value = "";
+        addTextElement.value = "";
+        addButtonElement.disabled = true;
+        addButtonElement.classList.add("button-color");
+      });
+      addNameElement.addEventListener("input", validComment);
+      addTextElement.addEventListener("input", validComment);
+    };
+    addComment();
+
     console.log("It works!");
   </script>
 </html>
