@@ -78,6 +78,16 @@
     const addNameElement = document.getElementById("name-input");
     const addTextElement = document.getElementById("comments-input");
     const currentDate = new Date();
+    const options = {
+      year: "2-digit",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    const formattedDate = currentDate
+      .toLocaleDateString("ru-RU", options)
+      .replace(",", "");
 
     // Add New Comment
     const validComment = () => {
@@ -115,7 +125,7 @@
           `<li class="comment">
           <div class="comment-header">
             <div><p>${addNameElement.value}</p></div>
-            <div><p>${currentDate}</p></div>
+            <div><p>${formattedDate}</p></div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
